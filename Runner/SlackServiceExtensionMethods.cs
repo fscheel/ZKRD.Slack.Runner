@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
+using Slack.NetStandard.Socket;
 
 namespace Runner
 {
@@ -17,11 +18,10 @@ namespace Runner
          services.Configure<SlackOptions>(configuration.GetSection("SlackOptions"));
          services.AddHostedService<SlackService>();
 
-
          services.AddTransient(serviceProvider =>
          {
             IOptions<SlackOptions> config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
-            return config.Value.Proxy != null ? new WebProxy(config.Value.Proxy.Host, config.Value.Proxy.Port) : new WebProxy();
+            return config.Value.Proxy != null ? new WebProxy(config.Value.Proxy.Host!, config.Value.Proxy.Port) : new WebProxy();
          });
          services.AddScoped(serviceProvider => new SocketModeClient(() => new ClientWebSocket
          {
@@ -43,6 +43,10 @@ namespace Runner
             HttpClient httpClient = serviceProvider.GetRequiredService<HttpClient>();
             return new SlackWebApiClient(httpClient);
          });
+
+         var slackReceiveChannel = System.Threading.Channels.Channel.CreateUnbounded<Envelope>();
+         services.AddSingleton(slackReceiveChannel.Writer);
+         services.AddSingleton(slackReceiveChannel.Reader);
       }
    }
 }
