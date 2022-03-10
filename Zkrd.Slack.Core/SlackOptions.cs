@@ -2,7 +2,8 @@
 {
    public class SlackOptions
    {
-      public string? Token { get; set; }
+      public string? AppToken { get; set; }
+      public string? BotToken { get; set; }
       public Proxy? Proxy { get; set; }
    }
 
