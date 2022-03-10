@@ -13,12 +13,18 @@ namespace Zkrd.Slack.Core.BackgroundServices
       private readonly IServiceProvider _services;
       private readonly ILogger<SlackBackgroundService> _logger;
       private readonly ChannelWriter<Envelope> _receiveChannelWriter;
+      private readonly ChannelReader<string> _sendChannelReader;
 
-      public SlackBackgroundService(ILogger<SlackBackgroundService> logger, IServiceProvider services, ChannelWriter<Envelope> receiveChannelWriter)
+      public SlackBackgroundService(
+         ILogger<SlackBackgroundService> logger,
+         IServiceProvider services,
+         ChannelWriter<Envelope> receiveChannelWriter,
+         ChannelReader<string> sendChannelReader)
       {
          _logger = logger;
          _services = services;
          _receiveChannelWriter = receiveChannelWriter;
+         _sendChannelReader = sendChannelReader;
       }
 
       protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -29,11 +35,26 @@ namespace Zkrd.Slack.Core.BackgroundServices
             SocketModeClient slackClient = scope.ServiceProvider.GetRequiredService<SocketModeClient>();
             SlackWebApiClient slackApiClient = scope.ServiceProvider.GetRequiredService<SlackWebApiClient>();
             await slackClient.ConnectAsync(slackApiClient, stoppingToken);
-            await foreach (Envelope envelope in slackClient.EnvelopeAsyncEnumerable(stoppingToken))
-            {
-               _logger.LogDebug("Received envelope {EnvelopeId} from slack", envelope.EnvelopeId);
-               await _receiveChannelWriter.WriteAsync(envelope, stoppingToken);
-            }
+            var receiveTask = Task.Run(
+               async () =>
+               {
+                  await foreach (Envelope envelope in slackClient.EnvelopeAsyncEnumerable(stoppingToken))
+                  {
+                     _logger.LogDebug("Received envelope {EnvelopeId} from slack", envelope.EnvelopeId);
+                     await _receiveChannelWriter.WriteAsync(envelope, stoppingToken);
+                  }
+               },
+               stoppingToken);
+            var sendTask = Task.Run(
+               async () =>
+               {
+                  await foreach (string message in _sendChannelReader.ReadAllAsync(stoppingToken))
+                  {
+                     await slackClient.Send(message, stoppingToken);
+                  }
+               },
+               stoppingToken);
+            Task.WaitAll(new[] { receiveTask, sendTask }, stoppingToken);
          }
          catch (OperationCanceledException)
          {

@@ -48,6 +48,10 @@ namespace Zkrd.Slack.Core
          var slackReceiveChannel = System.Threading.Channels.Channel.CreateUnbounded<Envelope>();
          services.AddSingleton(slackReceiveChannel.Writer);
          services.AddSingleton(slackReceiveChannel.Reader);
+         
+         var slackSendChannel = System.Threading.Channels.Channel.CreateUnbounded<string>();
+         services.AddSingleton(slackSendChannel.Writer);
+         services.AddSingleton(slackSendChannel.Reader);
       }
    }
 }
