@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Zkrd.Slack.WebApiDemo
@@ -17,9 +18,13 @@ namespace Zkrd.Slack.WebApiDemo
         }
 
         [HttpGet]
+        [Produces("text/plain")]
         public IActionResult Get() => Ok("Hello World");
 
         [HttpPost]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type=typeof(string))]
         public async Task<IActionResult> Post(HelloWorldRequest request)
         {
             _logger.LogDebug(

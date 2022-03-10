@@ -23,6 +23,7 @@ namespace Zkrd.Slack.Runner
       public void ConfigureServices(IServiceCollection services)
       {
          services.AddMvc(options => options.EnableEndpointRouting = false);
+         services.AddSwaggerGen();
 
          services.AddSlackBackgroundService(Configuration);
          services.AddSlackFoobar();
@@ -38,6 +39,12 @@ namespace Zkrd.Slack.Runner
          }
 
          app.UseMvc();
+         app.UseSwagger();
+         app.UseSwaggerUI(options =>
+         {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            options.RoutePrefix = string.Empty;
+         });
       }
    }
 }

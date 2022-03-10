@@ -7,6 +7,7 @@
 
     <ItemGroup>
       <PackageReference Include="Slack.NetStandard" Version="3.10.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
