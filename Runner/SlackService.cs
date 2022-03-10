@@ -6,6 +6,7 @@ using Slack.NetStandard.AsyncEnumerable;
 using Slack.NetStandard.Socket;
 using System;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Runner
@@ -14,11 +15,13 @@ namespace Runner
    {
       private readonly IServiceProvider _services;
       private readonly ILogger<SlackService> _logger;
+      private readonly ChannelWriter<Envelope> _receiveChannelWriter;
 
-      public SlackService(ILogger<SlackService> logger, IServiceProvider services)
+      public SlackService(ILogger<SlackService> logger, IServiceProvider services, ChannelWriter<Envelope> receiveChannelWriter)
       {
          _logger = logger;
          _services = services;
+         _receiveChannelWriter = receiveChannelWriter;
       }
 
       protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,7 +34,7 @@ namespace Runner
             await slackClient.ConnectAsync(slackApiClient, stoppingToken);
             await foreach (Envelope envelope in slackClient.EnvelopeAsyncEnumerable(stoppingToken))
             {
-               _logger.LogInformation("Processing {EnvelopeId}", envelope.EnvelopeId);
+               await _receiveChannelWriter.WriteAsync(envelope, stoppingToken);
             }
          }
          catch (OperationCanceledException)
