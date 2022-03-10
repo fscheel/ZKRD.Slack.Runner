@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Slack.NetStandard" Version="3.9.1" />
+      <PackageReference Include="Slack.NetStandard" Version="3.10.0" />
     </ItemGroup>
 
     <ItemGroup>
