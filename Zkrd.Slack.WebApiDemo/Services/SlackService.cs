@@ -16,9 +16,10 @@ public class SlackService : ISlackService
       _slackApi = slackApi;
    }
 
-   public async Task<(ApiResults, string)> PostMessage(string message, string channelName)
+   public async Task<(ApiResults, string)> PostMessage(string message, string channelName, CancellationToken cancellationToken = default)
    {
       ChannelListResponse channels = await _slackApi.Conversations.List(new ConversationListRequest());
+      cancellationToken.ThrowIfCancellationRequested();
       Channel? channel = channels.Channels.FirstOrDefault(channel1 => channel1.Name == channelName);
       if (channel == null)
       {

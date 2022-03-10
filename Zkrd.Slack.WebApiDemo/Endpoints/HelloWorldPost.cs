@@ -30,7 +30,7 @@ namespace Zkrd.Slack.WebApiDemo.Endpoints
             req.Message,
             req.Channel);
 
-         (ApiResults success, string message) = await _slackService.PostMessage(req.Message, req.Channel);
+         (ApiResults success, string message) = await _slackService.PostMessage(req.Message, req.Channel, ct);
 
          switch(success)
          {

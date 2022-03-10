@@ -13,6 +13,6 @@ public class HelloWorldGet: EndpointWithoutRequest
 
    public override async Task HandleAsync(CancellationToken ct)
    {
-      await SendAsync("Hello World");
+      await SendAsync("Hello World", cancellation: ct);
    }
 }

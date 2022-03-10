@@ -6,6 +6,7 @@ using Slack.NetStandard.Objects;
 using Slack.NetStandard.WebApi;
 using Slack.NetStandard.WebApi.Chat;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Zkrd.Slack.WebApiDemo.Services;
 
@@ -140,5 +141,30 @@ public class SlackServiceTests
       (ApiResults _, string errorMessage) = await sut.PostMessage("foo", channelName);
 
       errorMessage.Should().BeEmpty();
+   }
+
+   [Test]
+   public async Task PostMessage_Should_ThrowOperationAbortedException_If_CancellationTokenWasSetToCancelled()
+   {
+      var apiClient = Substitute.For<ISlackApiClient>();
+      const string channelName = "bar";
+      apiClient.Conversations.List(null).ReturnsForAnyArgs(
+         new ChannelListResponse
+         {
+            Channels = new []{new Channel{Name = channelName}}
+         });
+      apiClient.Chat.Post(null).ReturnsForAnyArgs(
+         new PostMessageResponse
+         {
+            OK = true,
+         }
+      );
+      var cts = new CancellationTokenSource();
+      cts.Cancel();
+      var sut = new SlackService(apiClient);
+
+      Func<Task> throwingAction = async () => await sut.PostMessage("foo", channelName, cts.Token);
+
+      await throwingAction.Should().ThrowAsync<OperationCanceledException>();
    }
 }
