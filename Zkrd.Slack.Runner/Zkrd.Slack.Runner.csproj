@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
+      <UserSecretsId>d829f127-da69-41bf-8a11-51b860cf07f7</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="FastEndpoints" Version="3.7.0" />
