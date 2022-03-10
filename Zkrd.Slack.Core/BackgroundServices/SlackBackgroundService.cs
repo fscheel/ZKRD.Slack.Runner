@@ -34,8 +34,8 @@ namespace Zkrd.Slack.Core.BackgroundServices
          using IServiceScope scope = _services.CreateScope();
          try
          {
-            SocketModeClient slackClient = scope.ServiceProvider.GetRequiredService<SocketModeClient>();
-            SlackWebApiClient slackApiClient = scope.ServiceProvider.GetRequiredService<SlackWebApiClient>();
+            var slackClient = scope.ServiceProvider.GetRequiredService<SocketModeClient>();
+            var slackApiClient = scope.ServiceProvider.GetRequiredService<SlackWebApiClient>();
             slackApiClient.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _options.Value.AppToken);
             await slackClient.ConnectAsync(slackApiClient, stoppingToken);
 

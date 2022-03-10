@@ -4,5 +4,5 @@ namespace Zkrd.Slack.Core.MessageHandlers;
 
 public interface ISyncSlackMessageHandler
 {
-    void HandleMessage(Envelope slackMessage);
+    void HandleMessage(Envelope slackMessage, CancellationToken cancellationToken = default);
 }

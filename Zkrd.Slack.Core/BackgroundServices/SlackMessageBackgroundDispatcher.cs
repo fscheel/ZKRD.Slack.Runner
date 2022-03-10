@@ -34,11 +34,13 @@ public class SlackMessageBackgroundDispatcher : BackgroundService
                 _logger.LogDebug("Received envelope {EnvelopeId} from channel", envelope.EnvelopeId);
                 foreach (ISyncSlackMessageHandler messageHandler in _syncSlackMessageHandlers)
                 {
-                    messageHandler.HandleMessage(envelope);
+                    stoppingToken.ThrowIfCancellationRequested();
+                    messageHandler.HandleMessage(envelope, stoppingToken);
                 }
 
                 foreach (IAsyncSlackMessageHandler messageHandler in _asyncSlackMessageHandlers)
                 {
+                    stoppingToken.ThrowIfCancellationRequested();
                     await messageHandler.HandleMessageAsync(envelope, stoppingToken);
                 }
             }

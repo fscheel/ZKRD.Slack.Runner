@@ -19,13 +19,14 @@ public class Foobar : IAsyncSlackMessageHandler
         _services = services;
     }
 
-    public async Task HandleMessageAsync(Envelope slackMessage, CancellationToken cancellationToken)
+    public async Task HandleMessageAsync(Envelope slackMessage, CancellationToken stoppingToken = default)
     {
         if (slackMessage.Payload is EventCallback { Event: AppMention appMentionEvent })
         {
             if (_messageRegex.IsMatch(appMentionEvent.Text))
             {
-                ISlackApiClient apiClient = _services.GetRequiredService<ISlackApiClient>();
+                stoppingToken.ThrowIfCancellationRequested();
+                var apiClient = _services.GetRequiredService<ISlackApiClient>();
                 await apiClient.Chat.Post(
                     new PostMessageRequest
                     {

@@ -22,7 +22,7 @@ namespace Zkrd.Slack.Core
                     nameof(HttpClientNames.ProxiedHttpClient),
                     (serviceProvider, client) =>
                     {
-                        IOptions<SlackOptions> config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
+                        var config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.Value.BotToken);
                     })
                 .ConfigurePrimaryHttpMessageHandler(
@@ -35,7 +35,7 @@ namespace Zkrd.Slack.Core
             services.AddTransient(
                 serviceProvider =>
                 {
-                    IOptions<SlackOptions> config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
+                    var config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
                     return config.Value.Proxy != null ? new WebProxy(config.Value.Proxy.Host!, config.Value.Proxy.Port) : new WebProxy();
                 });
 
@@ -48,7 +48,7 @@ namespace Zkrd.Slack.Core
             services.AddTransient(
                 serviceProvider =>
                 {
-                    IHttpClientFactory client = serviceProvider.GetRequiredService<IHttpClientFactory>();
+                    var client = serviceProvider.GetRequiredService<IHttpClientFactory>();
                     return new SlackWebApiClient(client.CreateClient(nameof(HttpClientNames.ProxiedHttpClient)));
                 });
             services.AddTransient<ISlackApiClient>(serviceProvider => serviceProvider.GetRequiredService<SlackWebApiClient>());
