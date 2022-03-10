@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Zkrd.Slack.Core;
 using Zkrd.Slack.FooBar;
+using Zkrd.Slack.WebApiDemo;
 
 namespace Zkrd.Slack.Runner
 {
@@ -25,6 +26,7 @@ namespace Zkrd.Slack.Runner
 
          services.AddSlackBackgroundService(Configuration);
          services.AddSlackFoobar();
+         services.AddHelloWorldController();
       }
 
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
