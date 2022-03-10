@@ -34,6 +34,7 @@ namespace Runner
             await slackClient.ConnectAsync(slackApiClient, stoppingToken);
             await foreach (Envelope envelope in slackClient.EnvelopeAsyncEnumerable(stoppingToken))
             {
+               _logger.LogDebug("Received envelope {EnvelopeId} from slack", envelope.EnvelopeId);
                await _receiveChannelWriter.WriteAsync(envelope, stoppingToken);
             }
          }
