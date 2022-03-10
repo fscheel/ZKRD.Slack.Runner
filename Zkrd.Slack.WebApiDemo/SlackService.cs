@@ -16,18 +16,18 @@ public class SlackService
       _slackApi = slackApi;
    }
 
-   public async Task<(bool, string)> PostMessage(string message, string channelName)
+   public async Task<(ApiResults, string)> PostMessage(string message, string channelName)
    {
       ChannelListResponse channels = await _slackApi.Conversations.List(new ConversationListRequest());
       Channel? channel = channels.Channels.FirstOrDefault(channel1 => channel1.Name == channelName);
       if (channel == null)
       {
          {
-            return (false, "Channel not found");
+            return (ApiResults.NotFound, "Channel not found");
          }
       }
 
-      await _slackApi.Chat.Post(
+      PostMessageResponse response = await _slackApi.Chat.Post(
          new PostMessageRequest
          {
             Channel = channel.ID,
@@ -37,6 +37,6 @@ public class SlackService
                new Section(message),
             }
          });
-      return (true, string.Empty);
+      return response.OK ? (ApiResults.Ok, string.Empty) : (ApiResults.Error, response.Error);
    }
 }
