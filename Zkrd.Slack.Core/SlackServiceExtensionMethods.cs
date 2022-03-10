@@ -8,6 +8,7 @@ using Slack.NetStandard;
 using Slack.NetStandard.AsyncEnumerable;
 using Slack.NetStandard.Socket;
 using Zkrd.Slack.Core.BackgroundServices;
+using Zkrd.Slack.Core.Services;
 
 namespace Zkrd.Slack.Core
 {
@@ -39,7 +40,7 @@ namespace Zkrd.Slack.Core
                     return config.Value.Proxy != null ? new WebProxy(config.Value.Proxy.Host!, config.Value.Proxy.Port) : new WebProxy();
                 });
 
-            services.AddScoped(
+            services.AddTransient(
                 serviceProvider => new SocketModeClient(
                     () => new ClientWebSocket
                     {
@@ -52,6 +53,8 @@ namespace Zkrd.Slack.Core
                     return new SlackWebApiClient(client.CreateClient(nameof(HttpClientNames.ProxiedHttpClient)));
                 });
             services.AddTransient<ISlackApiClient>(serviceProvider => serviceProvider.GetRequiredService<SlackWebApiClient>());
+            services.AddTransient<ISlackReceiveService, SlackReceiveService>();
+            services.AddTransient<ISlackMessageDispatchService, SlackMessageDispatchService>();
 
             var slackReceiveChannel = System.Threading.Channels.Channel.CreateUnbounded<Envelope>();
             services.AddSingleton(slackReceiveChannel.Writer);

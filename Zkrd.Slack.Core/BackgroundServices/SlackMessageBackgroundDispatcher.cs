@@ -1,53 +1,19 @@
-using System.Threading.Channels;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Slack.NetStandard.Socket;
-using Zkrd.Slack.Core.MessageHandlers;
+using Zkrd.Slack.Core.Services;
 
 namespace Zkrd.Slack.Core.BackgroundServices;
 
 public class SlackMessageBackgroundDispatcher : BackgroundService
 {
-    private readonly ChannelReader<Envelope> _receiveChannelReader;
-    private readonly ILogger<SlackMessageBackgroundDispatcher> _logger;
-    private readonly IEnumerable<ISyncSlackMessageHandler> _syncSlackMessageHandlers;
-    private readonly IEnumerable<IAsyncSlackMessageHandler> _asyncSlackMessageHandlers;
+    private readonly ISlackMessageDispatchService _slackMessageDispatchService;
 
-    public SlackMessageBackgroundDispatcher(
-        ChannelReader<Envelope> receiveChannelReader,
-        ILogger<SlackMessageBackgroundDispatcher> logger,
-        IEnumerable<ISyncSlackMessageHandler> syncSlackMessageHandlers,
-        IEnumerable<IAsyncSlackMessageHandler> asyncSlackMessageHandlers)
+    public SlackMessageBackgroundDispatcher(ISlackMessageDispatchService slackMessageDispatchService)
     {
-        _receiveChannelReader = receiveChannelReader;
-        _logger = logger;
-        _syncSlackMessageHandlers = syncSlackMessageHandlers;
-        _asyncSlackMessageHandlers = asyncSlackMessageHandlers;
+        _slackMessageDispatchService = slackMessageDispatchService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        try
-        {
-            await foreach (Envelope envelope in _receiveChannelReader.ReadAllAsync(stoppingToken))
-            {
-                _logger.LogDebug("Received envelope {EnvelopeId} from channel", envelope.EnvelopeId);
-                foreach (ISyncSlackMessageHandler messageHandler in _syncSlackMessageHandlers)
-                {
-                    stoppingToken.ThrowIfCancellationRequested();
-                    messageHandler.HandleMessage(envelope, stoppingToken);
-                }
-
-                foreach (IAsyncSlackMessageHandler messageHandler in _asyncSlackMessageHandlers)
-                {
-                    stoppingToken.ThrowIfCancellationRequested();
-                    await messageHandler.HandleMessageAsync(envelope, stoppingToken);
-                }
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            _logger.LogDebug("Message Background Dispatcher cancelled");
-        }
+        await _slackMessageDispatchService.ExecuteAsync(stoppingToken);
     }
 }
