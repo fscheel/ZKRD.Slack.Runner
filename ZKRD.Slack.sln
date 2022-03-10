@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runner", "Runner\Runner.csproj", "{76F444C7-214C-442B-96F5-B96D7D73A179}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zkrd.Slack.Runner", "Zkrd.Slack.Runner\Zkrd.Slack.Runner.csproj", "{76F444C7-214C-442B-96F5-B96D7D73A179}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zkrd.Slack.Core", "Zkrd.Slack.Core\Zkrd.Slack.Core.csproj", "{5B925910-D902-4A99-9D49-97B678E029C1}"
 EndProject

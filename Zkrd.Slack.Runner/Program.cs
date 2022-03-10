@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Runner
+namespace Zkrd.Slack.Runner
 {
    public class Program
    {

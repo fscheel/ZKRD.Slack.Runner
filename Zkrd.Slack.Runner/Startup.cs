@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Zkrd.Slack.Core;
 
-namespace Runner
+namespace Zkrd.Slack.Runner
 {
    public class Startup
    {

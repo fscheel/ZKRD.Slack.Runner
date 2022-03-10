@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Runner
+namespace Zkrd.Slack.Runner
 {
    [ApiController]
    [Route("/")]
