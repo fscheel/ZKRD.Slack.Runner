@@ -21,7 +21,6 @@ public class FooBarTests
    {
       var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      serviceInstance.Chat.Post(default).ReturnsForAnyArgs(new PostMessageResponse());
       services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
@@ -42,7 +41,6 @@ public class FooBarTests
    {
       var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      serviceInstance.Chat.Post(default).ReturnsForAnyArgs(new PostMessageResponse());
       services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
@@ -66,7 +64,6 @@ public class FooBarTests
    {
       var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      serviceInstance.Chat.Post(default).ReturnsForAnyArgs(new PostMessageResponse());
       services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
@@ -90,7 +87,6 @@ public class FooBarTests
    {
       var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      serviceInstance.Chat.Post(default).ReturnsForAnyArgs(new PostMessageResponse());
       services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
@@ -116,7 +112,6 @@ public class FooBarTests
    {
       var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      serviceInstance.Chat.Post(default).ReturnsForAnyArgs(new PostMessageResponse());
       services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
