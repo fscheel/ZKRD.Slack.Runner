@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Zkrd.Slack.WebApiDemo.Services;
 
 namespace Zkrd.Slack.WebApiDemo;
 

@@ -9,9 +9,12 @@ using NUnit.Framework;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Zkrd.Slack.WebApiDemo.ApiContracts;
 using Zkrd.Slack.WebApiDemo.Endpoints;
+using Zkrd.Slack.WebApiDemo.Services;
+using Zkrd.Slack.WebApiDemo.Tests.Mocks;
 
-namespace Zkrd.Slack.WebApiDemo.Tests;
+namespace Zkrd.Slack.WebApiDemo.Tests.Endpoints;
 
 [TestFixture]
 public class HelloWorldPostTests

@@ -7,8 +7,9 @@ using Slack.NetStandard.WebApi;
 using Slack.NetStandard.WebApi.Chat;
 using System;
 using System.Threading.Tasks;
+using Zkrd.Slack.WebApiDemo.Services;
 
-namespace Zkrd.Slack.WebApiDemo.Tests;
+namespace Zkrd.Slack.WebApiDemo.Tests.Services;
 
 [TestFixture]
 public class SlackServiceTests

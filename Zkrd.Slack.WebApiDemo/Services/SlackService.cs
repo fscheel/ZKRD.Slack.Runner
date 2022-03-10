@@ -5,7 +5,7 @@ using Slack.NetStandard.WebApi;
 using Slack.NetStandard.WebApi.Chat;
 using Slack.NetStandard.WebApi.Conversations;
 
-namespace Zkrd.Slack.WebApiDemo;
+namespace Zkrd.Slack.WebApiDemo.Services;
 
 public class SlackService : ISlackService
 {

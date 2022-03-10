@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Zkrd.Slack.WebApiDemo.Tests;
+namespace Zkrd.Slack.WebApiDemo.Tests.Mocks;
 
 public abstract class MockLogger<T> : ILogger<T>
 {

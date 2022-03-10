@@ -5,8 +5,9 @@ using NUnit.Framework;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Zkrd.Slack.WebApiDemo.Endpoints;
 
-namespace Zkrd.Slack.WebApiDemo.Tests;
+namespace Zkrd.Slack.WebApiDemo.Tests.Endpoints;
 
 [TestFixture]
 public class HelloWorldGetTests

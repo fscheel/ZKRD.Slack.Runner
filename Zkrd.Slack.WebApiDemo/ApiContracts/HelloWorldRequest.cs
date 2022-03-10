@@ -1,4 +1,4 @@
-namespace Zkrd.Slack.WebApiDemo;
+namespace Zkrd.Slack.WebApiDemo.ApiContracts;
 
 public class HelloWorldRequest
 {

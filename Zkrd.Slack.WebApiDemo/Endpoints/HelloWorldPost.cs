@@ -1,5 +1,7 @@
 ﻿using FastEndpoints;
 using Microsoft.Extensions.Logging;
+using Zkrd.Slack.WebApiDemo.ApiContracts;
+using Zkrd.Slack.WebApiDemo.Services;
 
 namespace Zkrd.Slack.WebApiDemo.Endpoints
 {

@@ -1,6 +1,6 @@
 using FastEndpoints;
 
-namespace Zkrd.Slack.WebApiDemo;
+namespace Zkrd.Slack.WebApiDemo.Endpoints;
 
 public class HelloWorldGet: EndpointWithoutRequest
 {
