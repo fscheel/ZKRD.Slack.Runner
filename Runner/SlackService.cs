@@ -1,14 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Slack.NetStandard;
 using Slack.NetStandard.AsyncEnumerable;
 using Slack.NetStandard.Socket;
 using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,12 +14,10 @@ namespace Runner
    {
       private readonly IServiceProvider _services;
       private readonly ILogger<SlackService> _logger;
-      private readonly IOptions<SlackOptions> _slackOptions;
 
-      public SlackService(ILogger<SlackService> logger, IOptions<SlackOptions> slackOptions, IServiceProvider services)
+      public SlackService(ILogger<SlackService> logger, IServiceProvider services)
       {
          _logger = logger;
-         _slackOptions = slackOptions;
          _services = services;
       }
 
@@ -32,12 +26,12 @@ namespace Runner
          using IServiceScope scope = _services.CreateScope();
          try
          {
-            var slackClient = scope.ServiceProvider.GetRequiredService<SocketModeClient>();
-            var slackApiClient = scope.ServiceProvider.GetRequiredService<SlackWebApiClient>();
+            SocketModeClient slackClient = scope.ServiceProvider.GetRequiredService<SocketModeClient>();
+            SlackWebApiClient slackApiClient = scope.ServiceProvider.GetRequiredService<SlackWebApiClient>();
             await slackClient.ConnectAsync(slackApiClient, stoppingToken);
             await foreach (Envelope envelope in slackClient.EnvelopeAsyncEnumerable(stoppingToken))
             {
-               _logger.LogInformation("Processing " + envelope.EnvelopeId);
+               _logger.LogInformation("Processing {EnvelopeId}", envelope.EnvelopeId);
             }
          }
          catch (OperationCanceledException)

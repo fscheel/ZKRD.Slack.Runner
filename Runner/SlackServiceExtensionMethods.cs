@@ -20,16 +20,13 @@ namespace Runner
 
          services.AddTransient(serviceProvider =>
          {
-            var config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
+            IOptions<SlackOptions> config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
             return new WebProxy(config.Value.Proxy.Host, config.Value.Proxy.Port);
          });
-         services.AddScoped(serviceProvider =>
+         services.AddScoped(serviceProvider => new SocketModeClient(() => new ClientWebSocket
          {
-            return new SocketModeClient(() => new ClientWebSocket
-            {
-               Options = { Proxy = serviceProvider.GetRequiredService<WebProxy>() },
-            });
-         });
+            Options = { Proxy = serviceProvider.GetRequiredService<WebProxy>() },
+         }));
          services.AddScoped(serviceProvider =>
          {
             var client = new HttpClient(new HttpClientHandler
@@ -43,7 +40,7 @@ namespace Runner
          });
          services.AddScoped(serviceProvider =>
          {
-            var httpClient = serviceProvider.GetRequiredService<HttpClient>();
+            HttpClient httpClient = serviceProvider.GetRequiredService<HttpClient>();
             return new SlackWebApiClient(httpClient);
          });
       }
