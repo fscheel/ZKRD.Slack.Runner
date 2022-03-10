@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zkrd.Slack.WebApiDemo.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zkrd.Slack.FooBar.Tests", "Zkrd.Slack.FooBar.Tests\Zkrd.Slack.FooBar.Tests.csproj", "{DC187956-FAA0-4E9B-9364-CB7990FB0A49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zkrd.Slack.Core.Tests", "Zkrd.Slack.Core.Tests\Zkrd.Slack.Core.Tests.csproj", "{B7F2258F-A97D-4F78-93C6-C575FB8760CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{DC187956-FAA0-4E9B-9364-CB7990FB0A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC187956-FAA0-4E9B-9364-CB7990FB0A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC187956-FAA0-4E9B-9364-CB7990FB0A49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F2258F-A97D-4F78-93C6-C575FB8760CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F2258F-A97D-4F78-93C6-C575FB8760CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F2258F-A97D-4F78-93C6-C575FB8760CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F2258F-A97D-4F78-93C6-C575FB8760CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
