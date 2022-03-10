@@ -39,7 +39,7 @@ public class SlackMessageBackgroundDispatcher : BackgroundService
 
                 foreach (IAsyncSlackMessageHandler messageHandler in _asyncSlackMessageHandlers)
                 {
-                    await messageHandler.HandleMessageAsync(envelope);
+                    await messageHandler.HandleMessageAsync(envelope, stoppingToken);
                 }
             }
         }

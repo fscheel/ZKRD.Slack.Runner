@@ -4,5 +4,5 @@ namespace Zkrd.Slack.Core.MessageHandlers;
 
 public interface IAsyncSlackMessageHandler
 {
-    Task HandleMessageAsync(Envelope slackMessage);
+    Task HandleMessageAsync(Envelope slackMessage, CancellationToken cancellationToken);
 }
