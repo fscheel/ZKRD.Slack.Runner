@@ -21,7 +21,7 @@ namespace Runner
          services.AddTransient(serviceProvider =>
          {
             IOptions<SlackOptions> config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
-            return new WebProxy(config.Value.Proxy.Host, config.Value.Proxy.Port);
+            return config.Value.Proxy != null ? new WebProxy(config.Value.Proxy.Host, config.Value.Proxy.Port) : new WebProxy();
          });
          services.AddScoped(serviceProvider => new SocketModeClient(() => new ClientWebSocket
          {
