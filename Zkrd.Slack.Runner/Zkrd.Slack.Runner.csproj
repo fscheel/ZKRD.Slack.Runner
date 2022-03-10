@@ -6,14 +6,19 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="FastEndpoints" Version="3.7.0" />
+      <PackageReference Include="FastEndpoints.Swagger" Version="3.7.0" />
       <PackageReference Include="Slack.NetStandard" Version="3.10.0" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Zkrd.Slack.Core\Zkrd.Slack.Core.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.FooBar\Zkrd.Slack.FooBar.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.WebApiDemo\Zkrd.Slack.WebApiDemo.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Zkrd.Slack.WebApiDemo.Tests" />
     </ItemGroup>
 
 </Project>

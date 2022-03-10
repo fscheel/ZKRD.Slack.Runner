@@ -1,17 +1,25 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using FastEndpoints;
+using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Builder;
+using Zkrd.Slack.Core;
+using Zkrd.Slack.FooBar;
+using Zkrd.Slack.WebApiDemo;
 
-namespace Zkrd.Slack.Runner
+WebApplicationBuilder builder = WebApplication.CreateBuilder();
+builder.Services.AddFastEndpoints();
+builder.Services.AddSlackBackgroundService(builder.Configuration);
+builder.Services.AddSlackFoobar();
+builder.Services.AddHelloWorldController();
+builder.Services.AddSwaggerDoc();
+
+WebApplication app = builder.Build();
+
+app.UseAuthorization();
+app.UseFastEndpoints();
+app.UseOpenApi();
+app.UseSwaggerUi3(settings =>
 {
-   public class Program
-   {
-      public static void Main(string[] args)
-      {
-         CreateHostBuilder(args).Build().Run();
-      }
+   settings.ConfigureDefaults();
+});
 
-      public static IHostBuilder CreateHostBuilder(string[] args) =>
-         Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
-   }
-}
+app.Run();
