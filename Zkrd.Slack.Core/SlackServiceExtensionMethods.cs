@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using System.Net.WebSockets;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Slack.NetStandard;
 using Slack.NetStandard.AsyncEnumerable;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.WebSockets;
 using Slack.NetStandard.Socket;
+using Zkrd.Slack.Core.BackgroundServices;
 
-namespace Runner
+namespace Zkrd.Slack.Core
 {
    public static class SlackServiceExtensionMethods
    {

@@ -1,15 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Channels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slack.NetStandard;
 using Slack.NetStandard.AsyncEnumerable;
 using Slack.NetStandard.Socket;
-using System;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 
-namespace Runner
+namespace Zkrd.Slack.Core.BackgroundServices
 {
    public class SlackBackgroundService : BackgroundService
    {

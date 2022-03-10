@@ -1,4 +1,4 @@
-﻿namespace Runner
+﻿namespace Zkrd.Slack.Core
 {
    public class SlackOptions
    {

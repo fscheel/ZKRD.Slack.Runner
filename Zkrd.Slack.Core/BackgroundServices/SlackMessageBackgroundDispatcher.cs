@@ -1,12 +1,9 @@
-using System;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Slack.NetStandard.Socket;
 
-namespace Runner;
+namespace Zkrd.Slack.Core.BackgroundServices;
 
 public class SlackMessageBackgroundDispatcher: BackgroundService
 {
