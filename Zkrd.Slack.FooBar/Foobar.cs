@@ -25,7 +25,7 @@ public class Foobar : IAsyncSlackMessageHandler
         {
             if (_messageRegex.IsMatch(appMentionEvent.Text))
             {
-                SlackWebApiClient apiClient = _services.GetRequiredService<SlackWebApiClient>();
+                ISlackApiClient apiClient = _services.GetRequiredService<ISlackApiClient>();
                 await apiClient.Chat.Post(
                     new PostMessageRequest
                     {

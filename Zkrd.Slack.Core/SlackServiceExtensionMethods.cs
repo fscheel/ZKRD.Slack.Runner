@@ -13,7 +13,7 @@ namespace Zkrd.Slack.Core
 {
     public static class SlackServiceExtensionMethods
     {
-        public static void AddSlackBackgroundService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSlackBackgroundService(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<SlackOptions>(configuration.GetSection("SlackOptions"));
             services.AddHostedService<SlackBackgroundService>();
@@ -51,10 +51,12 @@ namespace Zkrd.Slack.Core
                     IHttpClientFactory client = serviceProvider.GetRequiredService<IHttpClientFactory>();
                     return new SlackWebApiClient(client.CreateClient(nameof(HttpClientNames.ProxiedHttpClient)));
                 });
+            services.AddTransient<ISlackApiClient>(serviceProvider => serviceProvider.GetRequiredService<SlackWebApiClient>());
 
             var slackReceiveChannel = System.Threading.Channels.Channel.CreateUnbounded<Envelope>();
             services.AddSingleton(slackReceiveChannel.Writer);
             services.AddSingleton(slackReceiveChannel.Reader);
+            return services;
         }
     }
 }
