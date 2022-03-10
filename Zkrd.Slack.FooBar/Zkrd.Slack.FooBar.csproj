@@ -1,17 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Slack.NetStandard" Version="3.9.1" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Zkrd.Slack.Core\Zkrd.Slack.Core.csproj" />
-      <ProjectReference Include="..\Zkrd.Slack.FooBar\Zkrd.Slack.FooBar.csproj" />
     </ItemGroup>
 
 </Project>
