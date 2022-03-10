@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Runner
 {
-   public class SlackService : BackgroundService
+   public class SlackBackgroundService : BackgroundService
    {
       private readonly IServiceProvider _services;
-      private readonly ILogger<SlackService> _logger;
+      private readonly ILogger<SlackBackgroundService> _logger;
       private readonly ChannelWriter<Envelope> _receiveChannelWriter;
 
-      public SlackService(ILogger<SlackService> logger, IServiceProvider services, ChannelWriter<Envelope> receiveChannelWriter)
+      public SlackBackgroundService(ILogger<SlackBackgroundService> logger, IServiceProvider services, ChannelWriter<Envelope> receiveChannelWriter)
       {
          _logger = logger;
          _services = services;

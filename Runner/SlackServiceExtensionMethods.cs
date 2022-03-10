@@ -16,7 +16,7 @@ namespace Runner
       public static void AddSlackBackgroundService(this IServiceCollection services, IConfiguration configuration)
       {
          services.Configure<SlackOptions>(configuration.GetSection("SlackOptions"));
-         services.AddHostedService<SlackService>();
+         services.AddHostedService<SlackBackgroundService>();
 
          services.AddTransient(serviceProvider =>
          {
