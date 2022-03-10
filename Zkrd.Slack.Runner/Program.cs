@@ -19,7 +19,10 @@ app.UseFastEndpoints();
 app.UseOpenApi();
 app.UseSwaggerUi3(settings =>
 {
-   settings.ConfigureDefaults();
+   settings.ConfigureDefaults(uiSettings =>
+   {
+      uiSettings.Path = string.Empty;
+   } );
 });
 
 app.Run();
