@@ -7,7 +7,7 @@ using Slack.NetStandard.WebApi.Conversations;
 
 namespace Zkrd.Slack.WebApiDemo;
 
-public class SlackService
+public class SlackService : ISlackService
 {
    private readonly ISlackApiClient _slackApi;
 

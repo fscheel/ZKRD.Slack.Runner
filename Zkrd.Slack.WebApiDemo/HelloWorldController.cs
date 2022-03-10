@@ -9,9 +9,9 @@ namespace Zkrd.Slack.WebApiDemo
    public class HelloWorldController : ControllerBase
    {
       private readonly ILogger _logger;
-      private readonly SlackService _slackService;
+      private readonly ISlackService _slackService;
 
-      public HelloWorldController(ILogger<HelloWorldController> logger, SlackService slackService)
+      public HelloWorldController(ILogger<HelloWorldController> logger, ISlackService slackService)
       {
          _logger = logger;
          _slackService = slackService;

@@ -6,7 +6,7 @@ public static class ServiceExtensionMethods
 {
    public static IServiceCollection AddHelloWorldController(this IServiceCollection services)
    {
-      services.AddTransient<SlackService>();
+      services.AddTransient<ISlackService, SlackService>();
       return services;
    }
 }
