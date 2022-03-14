@@ -55,36 +55,18 @@ public class Help : IAsyncSlackMessageHandler
       }
    }
 
-   private IList<IMessageBlock> GetHelpBlocks(Match match)
-   {
-      IList<IMessageBlock> text;
-      if (match.Groups["module"].Success == false)
+   private IList<IMessageBlock> GetHelpBlocks(Match match) =>
+      match.Groups["module"].Success == false ? GetTopLevelHelp(match) : GetModuleSpecificHelp(match);
+   
+   private IList<IMessageBlock> GetTopLevelHelp(Match match) =>
+      new IMessageBlock[]
       {
-         text = new IMessageBlock[]
-         {
-            new Section(new MarkdownText(string.Format(IntroductoryText, match.Groups["mention"].Value,
-               BuildModuleList()))),
-         };
-      }
-      else
-      {
-         string module = match.Groups["module"].Value;
-         IModuleHelp? helpInfo = _moduleHelpInfos.FirstOrDefault(help => help.Name == module);
-         if (helpInfo == null)
-         {
-            text = new IMessageBlock[]
-            {
-               new Section(new MarkdownText($"I'm sorry but I can't give you any help about the module {module}")),
-            };
-         }
-         else
-         {
-            text = helpInfo.DedicatedHelp;
-         }
-      }
-
-      return text;
-   }
+         new Section(
+            new MarkdownText(
+               string.Format(IntroductoryText, match.Groups["mention"].Value, BuildModuleList())
+            )
+         ),
+      };
 
    private string BuildModuleList()
    {
@@ -100,5 +82,26 @@ public class Help : IAsyncSlackMessageHandler
       }
 
       return sb.ToString();
+   }
+
+   private IList<IMessageBlock> GetModuleSpecificHelp(Match match)
+   {
+      (string requestedModuleName, IModuleHelp? helpInfo) = FindRequestedModuleHelpInfo(match);
+      return helpInfo == null ? BuildUnknownModuleText(requestedModuleName) : helpInfo.DedicatedHelp;
+   }
+
+   private (string requestedModuleName, IModuleHelp? helpInfo) FindRequestedModuleHelpInfo(Match match)
+   {
+      string requestedModuleName = match.Groups["module"].Value;
+      IModuleHelp? helpInfo = _moduleHelpInfos.FirstOrDefault(help => help.Name == requestedModuleName);
+      return (requestedModuleName, helpInfo);
+   }
+
+   private static IList<IMessageBlock> BuildUnknownModuleText(string module)
+   {
+      return new IMessageBlock[]
+      {
+         new Section(new MarkdownText($"I'm sorry but I can't give you any help about the module {module}")),
+      };
    }
 }
