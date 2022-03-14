@@ -10,4 +10,5 @@ WORKDIR /app/
 RUN useradd runner
 RUN chmod 755 Zkrd.Slack.Runner
 USER runner
+EXPOSE 5001
 CMD ./Zkrd.Slack.Runner
