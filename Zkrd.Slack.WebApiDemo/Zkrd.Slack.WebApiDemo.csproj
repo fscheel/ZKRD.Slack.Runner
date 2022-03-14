@@ -12,4 +12,8 @@
       <PackageReference Include="Slack.NetStandard" Version="3.10.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Zkrd.Slack.Help\Zkrd.Slack.Help.csproj" />
+    </ItemGroup>
+
 </Project>

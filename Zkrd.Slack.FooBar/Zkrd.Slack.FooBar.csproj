@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Zkrd.Slack.Core\Zkrd.Slack.Core.csproj" />
+      <ProjectReference Include="..\Zkrd.Slack.Help\Zkrd.Slack.Help.csproj" />
     </ItemGroup>
 
 </Project>
