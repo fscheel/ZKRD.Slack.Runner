@@ -19,110 +19,95 @@ namespace Zkrd.Slack.WebApiDemo.Tests.Endpoints;
 [TestFixture]
 public class HelloWorldPostTests
 {
-   private static (HttpClient, MockLogger<HelloWorldPost>, ISlackService) Setup()
+   private static (HelloWorldPost, MockLogger<HelloWorldPost>, ISlackService) Setup()
    {
       var mockLogger = Substitute.For<MockLogger<HelloWorldPost>>();
       var mockSlackService = Substitute.For<ISlackService>();
-      var factory = new WebApplicationFactory<Program>();
-      HttpClient mockClient = factory
-         .WithWebHostBuilder(builder =>
-         {
-            builder.ConfigureTestServices(collection =>
-            {
-               collection.AddSingleton<ILogger<HelloWorldPost>>(mockLogger);
-               collection.AddSingleton(mockSlackService);
-            });
-         })
-         .CreateClient();
-      return (mockClient, mockLogger, mockSlackService);
+      var sut = Factory.Create<HelloWorldPost>(mockLogger, mockSlackService);
+      return (sut, mockLogger, mockSlackService);
    }
 
    [Test]
    public async Task Post_Should_ReturnNotFound_If_SlackServiceReturnsNotFound()
    {
-      (HttpClient client, _, ISlackService slackService) = Setup();
+      (HelloWorldPost sut, _, ISlackService slackService) = Setup();
       slackService.PostMessage(string.Empty, string.Empty)
          .ReturnsForAnyArgs((ApiResults.NotFound, "Something not found"));
 
-      (HttpResponseMessage? response, _) =
-         await client.POSTAsync<HelloWorldPost, HelloWorldRequest, string>(new HelloWorldRequest());
+      await sut.HandleAsync(new HelloWorldRequest(), default);
 
-      response.Should().HaveStatusCode(HttpStatusCode.NotFound);
+      sut.HttpContext.Response.StatusCode.Should().Be(404);
    }
 
    [Test]
    public async Task Post_Should_ReturnWhatIsNotFound_If_SlackServiceReturnsNotFound()
    {
-      (HttpClient client, _, ISlackService slackService) = Setup();
+      (HelloWorldPost sut, _, ISlackService slackService) = Setup();
       slackService.PostMessage(string.Empty, string.Empty)
          .ReturnsForAnyArgs((ApiResults.NotFound, "Something not found"));
 
-      (_, string? result) = await client.POSTAsync<HelloWorldPost, HelloWorldRequest, string>(new HelloWorldRequest());
+      await sut.HandleAsync(new HelloWorldRequest(), default);
 
-      result.Should().Be("Something not found");
+      sut.Response.Should().Be("Something not found");
    }
 
    [Test]
    public async Task Post_Should_ReturnBadRequest_If_SlackServiceReturnsError()
    {
-      (HttpClient client, _, ISlackService slackService) = Setup();
+      (HelloWorldPost sut, _, ISlackService slackService) = Setup();
       slackService.PostMessage(string.Empty, string.Empty).ReturnsForAnyArgs((ApiResults.Error, "Something went wrong"));
 
-      (HttpResponseMessage? response, _) =
-         await client.POSTAsync<HelloWorldPost, HelloWorldRequest, string>(new HelloWorldRequest());
+      await sut.HandleAsync(new HelloWorldRequest(), default);
 
-      response.Should().HaveStatusCode(HttpStatusCode.BadRequest);
+      sut.HttpContext.Response.StatusCode.Should().Be(400);
    }
 
    [Test]
    public async Task Post_Should_ReturnErrorMessage_If_SlackServiceReturnsError()
    {
-      (HttpClient client, _, ISlackService slackService) = Setup();
-      slackService.PostMessage(string.Empty, string.Empty)
-         .ReturnsForAnyArgs((ApiResults.NotFound, "Something went wrong"));
+      (HelloWorldPost sut, _, ISlackService slackService) = Setup();
+      slackService.PostMessage(string.Empty, string.Empty).ReturnsForAnyArgs((ApiResults.Error, "Something went wrong"));
 
-      (_, string? result) = await client.POSTAsync<HelloWorldPost, HelloWorldRequest, string>(new HelloWorldRequest());
+      await sut.HandleAsync(new HelloWorldRequest(), default);
 
-      result.Should().Be("Something went wrong");
+      sut.Response.Should().Be("Something went wrong");
    }
 
    [Test]
-   public async Task Post_Should_ReturnBOk_If_SlackServiceReturnsOk()
+   public async Task Post_Should_ReturnOk_If_SlackServiceReturnsOk()
    {
-      (HttpClient client, _, ISlackService slackService) = Setup();
+      (HelloWorldPost sut, _, ISlackService slackService) = Setup();
       slackService.PostMessage(string.Empty, string.Empty).ReturnsForAnyArgs((ApiResults.Ok, string.Empty));
 
-      (HttpResponseMessage? response, _) =
-         await client.POSTAsync<HelloWorldPost, HelloWorldRequest, string>(new HelloWorldRequest());
+      await sut.HandleAsync(new HelloWorldRequest(), default);
 
-      response.Should().HaveStatusCode(HttpStatusCode.OK);
+      sut.HttpContext.Response.StatusCode.Should().Be(200);
    }
 
    [Test]
    public async Task Post_Should_ReturnNoMessage_If_SlackServiceReturnsOk()
    {
-      (HttpClient client, _, ISlackService slackService) = Setup();
-      slackService.PostMessage(string.Empty, string.Empty)
-         .ReturnsForAnyArgs((ApiResults.Ok, string.Empty));
+      (HelloWorldPost sut, _, ISlackService slackService) = Setup();
+      slackService.PostMessage(string.Empty, string.Empty).ReturnsForAnyArgs((ApiResults.Ok, string.Empty));
 
-      (_, string? result) = await client.POSTAsync<HelloWorldPost, HelloWorldRequest, string>(new HelloWorldRequest());
+      await sut.HandleAsync(new HelloWorldRequest(), default);
 
-      result.Should().BeEmpty();
+      sut.Response.Should().BeOfType<string>().Which.Should().BeEmpty();
    }
 
    [Test]
    public async Task Post_Should_LogCall()
    {
-      (HttpClient client, MockLogger<HelloWorldPost> logger, ISlackService slackService) = Setup();
+      (HelloWorldPost sut, MockLogger<HelloWorldPost> logger, ISlackService slackService) = Setup();
       slackService.PostMessage(string.Empty, string.Empty)
          .ReturnsForAnyArgs((ApiResults.Ok, string.Empty));
 
 
-      await client.POSTAsync<HelloWorldPost, HelloWorldRequest, string>(new HelloWorldRequest
+      await sut.HandleAsync(new HelloWorldRequest
       {
          Channel = "meow",
          Message = "Hey there",
-      });
+      }, default);
 
       logger.Received(1).Log(
          LogLevel.Debug,
