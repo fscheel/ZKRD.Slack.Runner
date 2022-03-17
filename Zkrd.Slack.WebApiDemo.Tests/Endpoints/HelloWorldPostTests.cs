@@ -1,13 +1,8 @@
 using FastEndpoints;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Zkrd.Slack.WebApiDemo.ApiContracts;
 using Zkrd.Slack.WebApiDemo.Endpoints;
