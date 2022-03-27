@@ -16,7 +16,7 @@ public class SlackReceiveService : ISlackReceiveService
    private readonly SocketModeClient _slackClient;
 
    public SlackReceiveService(ILogger<SlackReceiveService> logger, ChannelWriter<Envelope> receiveChannelWriter,
-      IOptions<SlackOptions> options, SlackWebApiClient slackApiClient, SocketModeClient slackClient)
+      IOptions<SlackCoreOptions> options, SlackWebApiClient slackApiClient, SocketModeClient slackClient)
    {
       _logger = logger;
       _receiveChannelWriter = receiveChannelWriter;

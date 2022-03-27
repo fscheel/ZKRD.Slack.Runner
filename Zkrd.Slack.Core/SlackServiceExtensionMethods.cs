@@ -17,16 +17,23 @@ namespace Zkrd.Slack.Core
       public static IServiceCollection AddSlackBackgroundService(this IServiceCollection services,
          IConfiguration configuration)
       {
-         services.Configure<SlackOptions>(configuration.GetSection("SlackOptions"));
+         services.Configure<SlackCoreOptions>(configuration.GetSection("SlackCore"));
+         services.Configure<ProxyOptions>(configuration.GetSection("Proxy"));
          services.AddHostedService<SlackBackgroundService>();
          services.AddHostedService<SlackMessageBackgroundDispatcher>();
 
          services.AddTransient(
             serviceProvider =>
             {
-               var config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
-               return config.Value.Proxy != null
-                  ? new WebProxy(config.Value.Proxy.Host!, config.Value.Proxy.Port)
+               var config = serviceProvider.GetService<IOptions<ProxyOptions>>();
+               string? host = config?.Value.Host;
+               int? port = config?.Value.Port;
+               if ((host == null) != (port == null))
+               {
+                  throw new Exception("Proxy configuration must contain a host and port option if given.");
+               }
+               return host != null
+                  ? new WebProxy(host, port!.Value)
                   : new WebProxy();
             });
 
@@ -40,7 +47,7 @@ namespace Zkrd.Slack.Core
          services
             .AddHttpClient<SlackWebApiClient>((provider, client) =>
             {
-               var config = provider.GetRequiredService<IOptions<SlackOptions>>();
+               var config = provider.GetRequiredService<IOptions<SlackCoreOptions>>();
                client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Bearer", config.Value.BotToken);
             })

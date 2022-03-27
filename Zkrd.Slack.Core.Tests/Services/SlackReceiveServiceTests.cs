@@ -25,7 +25,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_ConnectToSlackApi()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient webApiClient, SocketModeClient socketModeClient) = Setup();
 
       await sut.ExecuteAsync(CancellationToken.None);
@@ -36,7 +36,7 @@ public class SlackReceiveServiceTests
    [Test]
    public void Constructor_Should_SetAuthorizationTokenOfUsedWebApiClient()
    {
-      (SlackReceiveService _, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService _, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient webApiClient, SocketModeClient _) = Setup();
 
       // Constructor is run in Setup, so do nothing here
@@ -48,7 +48,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_Not_AcknowledgeAnything_If_NoMessageWasReceived()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient socketModeClient) = Setup();
 
       await sut.ExecuteAsync(CancellationToken.None);
@@ -60,7 +60,7 @@ public class SlackReceiveServiceTests
    public async Task ExecuteAsync_Should_Not_WriteToChannel_If_NoMessageWasReceived()
    {
       (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> writer,
-         IOptions<SlackOptions> _,
+         IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient _) = Setup();
 
       await sut.ExecuteAsync(CancellationToken.None);
@@ -72,7 +72,7 @@ public class SlackReceiveServiceTests
    public async Task ExecuteAsync_Should_Not_Log_If_NoMessageWasReceived()
    {
       (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _,
-         IOptions<SlackOptions> _,
+         IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient _) = Setup();
 
       await sut.ExecuteAsync(CancellationToken.None);
@@ -83,7 +83,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_AcknowledgeMessage_If_SingleMessageWasReceived()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient socketModeClient) = Setup();
       socketModeClient.EnvelopeAsyncEnumerable(CancellationToken.None).ReturnsForAnyArgs(new List<Envelope>
       {
@@ -98,7 +98,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_WriteEnvelopeToChannel_If_SingleMessageWasReceived()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> writer, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> writer, IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient socketModeClient) = Setup();
       var envelope = new Envelope { EnvelopeId = "EnvelopeId" };
       socketModeClient.EnvelopeAsyncEnumerable(CancellationToken.None).ReturnsForAnyArgs(new List<Envelope>
@@ -114,7 +114,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_LogEnvelopeId_If_SingleMessageWasReceived()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient socketModeClient) = Setup();
       socketModeClient.EnvelopeAsyncEnumerable(CancellationToken.None).ReturnsForAnyArgs(new List<Envelope>
       {
@@ -129,7 +129,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_AcknowledgeAllMessages_If_MultipleMessagesWereReceived()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient socketModeClient) = Setup();
       socketModeClient.EnvelopeAsyncEnumerable(CancellationToken.None).ReturnsForAnyArgs(new List<Envelope>
       {
@@ -146,7 +146,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_WriteAllMessagesToChannel_If_MultipleMessagesWereReceived()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> writer, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> writer, IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient socketModeClient) = Setup();
       var envelope1 = new Envelope { EnvelopeId = "EnvelopeId 1" };
       var envelope2 = new Envelope { EnvelopeId = "EnvelopeId 2" };
@@ -165,7 +165,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_LogAllEnvelopeIds_If_MultipleMessagesWereReceived()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient _, SocketModeClient socketModeClient) = Setup();
       socketModeClient.EnvelopeAsyncEnumerable(CancellationToken.None).ReturnsForAnyArgs(new List<Envelope>
       {
@@ -182,7 +182,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_LogCancellation_If_CancellationWasRequested()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient slackWebApiClient, SocketModeClient socketModeClient) = Setup();
       socketModeClient.ConnectAsync(slackWebApiClient, default).ThrowsForAnyArgs<OperationCanceledException>();
 
@@ -194,7 +194,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_LogException_If_ExceptionHappened()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient slackWebApiClient, SocketModeClient socketModeClient) = Setup();
       Exception exception = new();
       socketModeClient.ConnectAsync(slackWebApiClient, default).ThrowsForAnyArgs(exception);
@@ -214,7 +214,7 @@ public class SlackReceiveServiceTests
    [Test]
    public async Task ExecuteAsync_Should_RethrowException_If_ExceptionHappened()
    {
-      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackOptions> _,
+      (SlackReceiveService sut, MockLogger<SlackReceiveService> _, ChannelWriter<Envelope> _, IOptions<SlackCoreOptions> _,
          SlackWebApiClient slackWebApiClient, SocketModeClient socketModeClient) = Setup();
       Exception exception = new();
       socketModeClient.ConnectAsync(slackWebApiClient, default).ThrowsForAnyArgs(exception);
@@ -225,13 +225,13 @@ public class SlackReceiveServiceTests
    }
 
    private static (SlackReceiveService sut, MockLogger<SlackReceiveService> logger, ChannelWriter<Envelope>
-      receiveChannelWriter, IOptions<SlackOptions> options, SlackWebApiClient slackWebApiClient, SocketModeClient
+      receiveChannelWriter, IOptions<SlackCoreOptions> options, SlackWebApiClient slackWebApiClient, SocketModeClient
       socketModeClient) Setup()
    {
       var logger = Substitute.For<MockLogger<SlackReceiveService>>();
       var receiveChannelWriter = Substitute.For<ChannelWriter<Envelope>>();
-      var options = Substitute.For<IOptions<SlackOptions>>();
-      options.Value.Returns(new SlackOptions
+      var options = Substitute.For<IOptions<SlackCoreOptions>>();
+      options.Value.Returns(new SlackCoreOptions
       {
          AppToken = "this is the app token",
       });
