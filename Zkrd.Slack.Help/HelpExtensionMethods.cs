@@ -7,7 +7,7 @@ public static class HelpExtensionMethods
 {
     public static IServiceCollection AddSlackBotHelp(this IServiceCollection services)
     {
-        services.AddSingleton<IAsyncSlackMessageHandler, Help>();
+        services.AddTransient<IAsyncSlackMessageHandler, Help>();
         return services;
     }
 }

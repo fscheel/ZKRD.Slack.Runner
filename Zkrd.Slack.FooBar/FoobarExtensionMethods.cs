@@ -8,7 +8,7 @@ public static class FoobarExtensionMethods
 {
     public static IServiceCollection AddSlackFoobar(this IServiceCollection services)
     {
-        services.AddSingleton<IAsyncSlackMessageHandler, Foobar>()
+        services.AddTransient<IAsyncSlackMessageHandler, Foobar>()
             .AddSingleton<IModuleHelp, FooBarHelp>();
         return services;
     }

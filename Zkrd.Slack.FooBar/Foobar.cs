@@ -12,11 +12,11 @@ namespace Zkrd.Slack.FooBar;
 public class Foobar : IAsyncSlackMessageHandler
 {
     private readonly Regex _messageRegex = new(@"^<@\w+> foo$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private readonly IServiceProvider _services;
+    private readonly ISlackApiClient _apiClient;
 
-    public Foobar(IServiceProvider services)
+    public Foobar(ISlackApiClient apiClient)
     {
-        _services = services;
+        _apiClient = apiClient;
     }
 
     public async Task HandleMessageAsync(Envelope slackMessage, CancellationToken stoppingToken = default)
@@ -26,8 +26,7 @@ public class Foobar : IAsyncSlackMessageHandler
             if (_messageRegex.IsMatch(appMentionEvent.Text))
             {
                 stoppingToken.ThrowIfCancellationRequested();
-                var apiClient = _services.GetRequiredService<ISlackApiClient>();
-                await apiClient.Chat.Post(
+                await _apiClient.Chat.Post(
                     new PostMessageRequest
                     {
                         Channel = appMentionEvent.Channel,

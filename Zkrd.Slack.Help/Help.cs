@@ -17,8 +17,8 @@ public class Help : IAsyncSlackMessageHandler
    private readonly Regex _messageRegex = new(@"^(?<mention><@\w+>) help(?: (?<module>\w+))?$",
       RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-   private readonly IServiceProvider _services;
    private readonly IEnumerable<IModuleHelp> _moduleHelpInfos;
+   private readonly ISlackApiClient _apiClient;
 
    private const string IntroductoryText =
       "_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.\n" +
@@ -28,10 +28,10 @@ public class Help : IAsyncSlackMessageHandler
       "*Loaded modules:*\n" +
       "{1}";
 
-   public Help(IServiceProvider services, IEnumerable<IModuleHelp> moduleHelpInfos)
+   public Help(IEnumerable<IModuleHelp> moduleHelpInfos, ISlackApiClient apiClient)
    {
-      _services = services;
       _moduleHelpInfos = moduleHelpInfos;
+      _apiClient = apiClient;
    }
 
    public async Task HandleMessageAsync(Envelope slackMessage, CancellationToken stoppingToken = default)
@@ -42,10 +42,9 @@ public class Help : IAsyncSlackMessageHandler
          if (match.Success)
          {
             stoppingToken.ThrowIfCancellationRequested();
-            var apiClient = _services.GetRequiredService<ISlackApiClient>();
             IList<IMessageBlock> helpBlocks = GetHelpBlocks(match);
 
-            await apiClient.Chat.Post(
+            await _apiClient.Chat.Post(
                new PostMessageRequest
                {
                   Channel = appMentionEvent.Channel,

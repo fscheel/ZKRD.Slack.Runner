@@ -25,9 +25,7 @@ public class TopLevelHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_ListModule_If_SingleModuleIsLoaded()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -42,7 +40,7 @@ public class TopLevelHelpTests
       {
          new TestModuleHelp("TestModule", "This is the description of TestModule", new List<IMessageBlock>()),
       };
-      var sut = new Help(services, moduleHelpInfos);
+      var sut = new Help(moduleHelpInfos, serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -60,9 +58,7 @@ public class TopLevelHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_ListAllModules_If_MultipleModulesAreLoaded()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -80,7 +76,7 @@ public class TopLevelHelpTests
          new TestModuleHelp("TestModule3", "This is the description of TestModule3", new List<IMessageBlock>()),
          new TestModuleHelp("TestModule4", "This is the description of TestModule4", new List<IMessageBlock>()),
       };
-      var sut = new Help(services, moduleHelpInfos);
+      var sut = new Help(moduleHelpInfos, serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -101,9 +97,7 @@ public class TopLevelHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_ListModulesInAlphabeticalOrder_If_MultipleModulesAreLoaded()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -121,7 +115,7 @@ public class TopLevelHelpTests
          new TestModuleHelp("BTestModule", "This is the description of BTestModule", new List<IMessageBlock>()),
          new TestModuleHelp("FTestModule", "This is the description of FTestModule", new List<IMessageBlock>()),
       };
-      var sut = new Help(services, moduleHelpInfos);
+      var sut = new Help(moduleHelpInfos, serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -136,9 +130,7 @@ public class TopLevelHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_ThrowOperationAbortedException_If_CancellationWasRequested()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -151,7 +143,7 @@ public class TopLevelHelpTests
       };
       var cts = new CancellationTokenSource();
       cts.Cancel();
-      var sut = new Help(services, new List<IModuleHelp>());
+      var sut = new Help(new List<IModuleHelp>(), serviceInstance);
 
       Func<Task> throwingAction = async () => await sut.HandleMessageAsync(input, cts.Token);
 

@@ -3,11 +3,9 @@ using NUnit.Framework;
 using Slack.NetStandard;
 using Slack.NetStandard.EventsApi;
 using Slack.NetStandard.EventsApi.CallbackEvents;
-using Slack.NetStandard.Messages.Blocks;
 using Slack.NetStandard.Socket;
 using Slack.NetStandard.WebApi.Chat;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,9 +20,7 @@ public class GeneralHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_Not_PostMessage_If_MessageWasNotAMention()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -32,7 +28,7 @@ public class GeneralHelpTests
             Event = new BotMessage(),
          },
       };
-      var sut = new Help(services, new List<IModuleHelp>());
+      var sut = new Help(new List<IModuleHelp>(), serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -42,9 +38,7 @@ public class GeneralHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_Not_PostMessage_If_MentionDidNotContainHelp()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -55,7 +49,7 @@ public class GeneralHelpTests
             },
          },
       };
-      var sut = new Help(services, new List<IModuleHelp>());
+      var sut = new Help(new List<IModuleHelp>(), serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -65,9 +59,7 @@ public class GeneralHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_Not_PostMessage_If_MentionContainedAtButNotHelp()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -78,7 +70,7 @@ public class GeneralHelpTests
             },
          },
       };
-      var sut = new Help(services, new List<IModuleHelp>());
+      var sut = new Help(new List<IModuleHelp>(), serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -89,9 +81,8 @@ public class GeneralHelpTests
    public async Task
       HandleMessageAsync_Should_PostMessageWithGeneralHelp_If_MessageWasAMentionWithHelp_And_NoModulesAreLoaded()
    {
-      var services = new ServiceContainer();
+
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -102,7 +93,7 @@ public class GeneralHelpTests
             },
          },
       };
-      var sut = new Help(services, new List<IModuleHelp>());
+      var sut = new Help(new List<IModuleHelp>(), serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 

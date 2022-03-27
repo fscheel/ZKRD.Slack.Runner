@@ -19,9 +19,7 @@ public class FooBarTests
    [Test]
    public async Task HandleMessageAsync_Should_Not_PostMessage_If_MessageWasNotAMention()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -29,7 +27,7 @@ public class FooBarTests
             Event = new BotMessage(),
          },
       };
-      var sut = new Foobar(services);
+      var sut = new Foobar(serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -39,9 +37,7 @@ public class FooBarTests
    [Test]
    public async Task HandleMessageAsync_Should_Not_PostMessage_If_MessageDidNotContainFooOnly()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -52,7 +48,7 @@ public class FooBarTests
             },
          },
       };
-      var sut = new Foobar(services);
+      var sut = new Foobar(serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -62,9 +58,7 @@ public class FooBarTests
    [Test]
    public async Task HandleMessageAsync_Should_Not_PostMessage_If_TextMessageContainedMentionButNotFoo()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -75,7 +69,7 @@ public class FooBarTests
             },
          },
       };
-      var sut = new Foobar(services);
+      var sut = new Foobar(serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -85,9 +79,7 @@ public class FooBarTests
    [Test]
    public async Task HandleMessageAsync_Should_PostMessageWithBar_If_MessageWasAMentionWithFooOnly()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -98,7 +90,7 @@ public class FooBarTests
             },
          },
       };
-      var sut = new Foobar(services);
+      var sut = new Foobar(serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -110,9 +102,7 @@ public class FooBarTests
    [Test]
    public async Task HandleMessageAsync_Should_ThrowOperationAbortedException_If_CancellationWasRequested()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -125,7 +115,7 @@ public class FooBarTests
       };
       var cts = new CancellationTokenSource();
       cts.Cancel();
-      var sut = new Foobar(services);
+      var sut = new Foobar(serviceInstance);
 
       Func<Task> throwingAction = async () => await sut.HandleMessageAsync(input, cts.Token);
 

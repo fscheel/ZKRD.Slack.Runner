@@ -23,9 +23,7 @@ public class ModuleHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_ShowModuleHelp()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -43,7 +41,7 @@ public class ModuleHelpTests
             new Section(new MarkdownText("This is the long, long, long description of the module")),
          }),
       };
-      var sut = new Help(services, moduleHelpInfos);
+      var sut = new Help(moduleHelpInfos, serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -55,9 +53,7 @@ public class ModuleHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_ShowAllBlocksOfModuleHelp()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -77,7 +73,7 @@ public class ModuleHelpTests
             new Section(new MarkdownText("And a third")),
          }),
       };
-      var sut = new Help(services, moduleHelpInfos);
+      var sut = new Help(moduleHelpInfos, serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
@@ -89,9 +85,7 @@ public class ModuleHelpTests
    [Test]
    public async Task HandleMessageAsync_Should_ReturnErrorMessageIfModuleWasNotFound()
    {
-      var services = new ServiceContainer();
       var serviceInstance = Substitute.For<ISlackApiClient>();
-      services.AddService(typeof(ISlackApiClient), serviceInstance);
       var input = new Envelope
       {
          Payload = new EventCallback
@@ -102,7 +96,7 @@ public class ModuleHelpTests
             },
          },
       };
-      var sut = new Help(services, new List<IModuleHelp>());
+      var sut = new Help(new List<IModuleHelp>(), serviceInstance);
 
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
