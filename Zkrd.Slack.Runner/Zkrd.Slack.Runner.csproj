@@ -7,8 +7,8 @@
   </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FastEndpoints" Version="3.10.0" />
-      <PackageReference Include="FastEndpoints.Swagger" Version="3.10.0" />
+      <PackageReference Include="FastEndpoints" Version="3.11.0" />
+      <PackageReference Include="FastEndpoints.Swagger" Version="3.11.0" />
       <PackageReference Include="Slack.NetStandard" Version="3.10.0" />
     </ItemGroup>
 
