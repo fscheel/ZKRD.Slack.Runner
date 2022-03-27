@@ -304,10 +304,10 @@ public class SlackMessageDispatchServiceTests
       var logger = Substitute.For<MockLogger<SlackMessageDispatchService>>();
       var syncSlackMessageHandlers = new List<ISyncSlackMessageHandler>();
       var asyncSlackMessageHandlers = new List<IAsyncSlackMessageHandler>();
-      var sut = new SlackMessageDispatchService(receiveChannelReader,
-         logger,
-         syncSlackMessageHandlers,
-         asyncSlackMessageHandlers);
+      var serviceProvider = Substitute.For<IServiceProvider>();
+      serviceProvider.GetService(typeof(IEnumerable<ISyncSlackMessageHandler>)).Returns(syncSlackMessageHandlers);
+      serviceProvider.GetService(typeof(IEnumerable<IAsyncSlackMessageHandler>)).Returns(asyncSlackMessageHandlers);
+      var sut = new SlackMessageDispatchService(receiveChannelReader, logger, serviceProvider);
       return (sut, receiveChannelReader, logger, syncSlackMessageHandlers, asyncSlackMessageHandlers);
    }
 }
