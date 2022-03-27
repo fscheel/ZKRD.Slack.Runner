@@ -12,54 +12,52 @@ using Zkrd.Slack.Core.Services;
 
 namespace Zkrd.Slack.Core
 {
-    public static class SlackServiceExtensionMethods
-    {
-        public static IServiceCollection AddSlackBackgroundService(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<SlackOptions>(configuration.GetSection("SlackOptions"));
-            services.AddHostedService<SlackBackgroundService>();
-            services.AddHostedService<SlackMessageBackgroundDispatcher>();
-            services.AddHttpClient(
-                    nameof(HttpClientNames.ProxiedHttpClient),
-                    (serviceProvider, client) =>
-                    {
-                        var config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
-                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.Value.BotToken);
-                    })
-                .ConfigurePrimaryHttpMessageHandler(
-                    serviceProvider =>
-                        new HttpClientHandler
-                        {
-                            Proxy = serviceProvider.GetRequiredService<WebProxy>(),
-                        });
+   public static class SlackServiceExtensionMethods
+   {
+      public static IServiceCollection AddSlackBackgroundService(this IServiceCollection services,
+         IConfiguration configuration)
+      {
+         services.Configure<SlackOptions>(configuration.GetSection("SlackOptions"));
+         services.AddHostedService<SlackBackgroundService>();
+         services.AddHostedService<SlackMessageBackgroundDispatcher>();
 
-            services.AddTransient(
-                serviceProvider =>
-                {
-                    var config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
-                    return config.Value.Proxy != null ? new WebProxy(config.Value.Proxy.Host!, config.Value.Proxy.Port) : new WebProxy();
-                });
+         services.AddTransient(
+            serviceProvider =>
+            {
+               var config = serviceProvider.GetRequiredService<IOptions<SlackOptions>>();
+               return config.Value.Proxy != null
+                  ? new WebProxy(config.Value.Proxy.Host!, config.Value.Proxy.Port)
+                  : new WebProxy();
+            });
 
-            services.AddTransient(
-                serviceProvider => new SocketModeClient(
-                    () => new ClientWebSocket
-                    {
-                        Options = { Proxy = serviceProvider.GetRequiredService<WebProxy>() },
-                    }));
-            services.AddTransient(
-                serviceProvider =>
-                {
-                    var client = serviceProvider.GetRequiredService<IHttpClientFactory>();
-                    return new SlackWebApiClient(client.CreateClient(nameof(HttpClientNames.ProxiedHttpClient)));
-                });
-            services.AddTransient<ISlackApiClient>(serviceProvider => serviceProvider.GetRequiredService<SlackWebApiClient>());
-            services.AddTransient<ISlackReceiveService, SlackReceiveService>();
-            services.AddTransient<ISlackMessageDispatchService, SlackMessageDispatchService>();
+         services.AddTransient(
+            serviceProvider => new SocketModeClient(
+               () => new ClientWebSocket
+               {
+                  Options = { Proxy = serviceProvider.GetRequiredService<WebProxy>() },
+               }));
 
-            var slackReceiveChannel = System.Threading.Channels.Channel.CreateUnbounded<Envelope>();
-            services.AddSingleton(slackReceiveChannel.Writer);
-            services.AddSingleton(slackReceiveChannel.Reader);
-            return services;
-        }
-    }
+         services
+            .AddHttpClient<SlackWebApiClient>((provider, client) =>
+            {
+               var config = provider.GetRequiredService<IOptions<SlackOptions>>();
+               client.DefaultRequestHeaders.Authorization =
+                  new AuthenticationHeaderValue("Bearer", config.Value.BotToken);
+            })
+            .ConfigurePrimaryHttpMessageHandler(serviceProvider =>
+               new HttpClientHandler
+               {
+                  Proxy = serviceProvider.GetRequiredService<WebProxy>(),
+               });
+         services.AddTransient<ISlackApiClient>(serviceProvider =>
+            serviceProvider.GetRequiredService<SlackWebApiClient>());
+         services.AddTransient<ISlackReceiveService, SlackReceiveService>();
+         services.AddTransient<ISlackMessageDispatchService, SlackMessageDispatchService>();
+
+         var slackReceiveChannel = System.Threading.Channels.Channel.CreateUnbounded<Envelope>();
+         services.AddSingleton(slackReceiveChannel.Writer);
+         services.AddSingleton(slackReceiveChannel.Reader);
+         return services;
+      }
+   }
 }
