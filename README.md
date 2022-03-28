@@ -1,10 +1,12 @@
 # The ZKRD Slack bot
 
-This is the slack bot used and developed by [ZKRD gGmbH](https://www.zkrd.de). It is used as a tool for training, prototyping and productivity. Its ultimate goal is to enhance the daily work the employees at ZKRD.
+This is the slack bot used and developed by [ZKRD gGmbH](https://www.zkrd.de). It is used as a tool for training,
+prototyping and productivity. Its ultimate goal is to enhance the daily work the employees at ZKRD.
 
 ## Usage
 
-The bot is currently not distributed in a packaged format, but you have multiple ways to compile and run the bot in production:
+The bot is currently not distributed in a packaged format, but you have multiple ways to compile and run the bot in
+production:
 
 ### Running
 
@@ -16,7 +18,9 @@ To run the bot in docker, run the following command in the root source directory
 $ docker build -t slack-bot .
 ```
 
-You can then proceed to run the container. It is recommended to create a dedicated directory for the configuration file (see the chapter about configuration for more information). Use the following command (or an equivalent docker-compose file) to run the container:
+You can then proceed to run the container. It is recommended to create a dedicated directory for the configuration
+file (see the chapter about configuration for more information). Use the following command (or an equivalent
+docker-compose file) to run the container:
 
 ```shell
 $ docker run -d -v"$(pwd)/appsettings.json:/app/appsettings.json" slack-bot
@@ -24,7 +28,8 @@ $ docker run -d -v"$(pwd)/appsettings.json:/app/appsettings.json" slack-bot
 
 #### Directly from source
 
-To run the application directly from source, you need the .NET 6.0 SDK installed. Change into the `Zkrd.Slack.Runner` directory and run the application in release mode:
+To run the application directly from source, you need the .NET 6.0 SDK installed. Change into the `Zkrd.Slack.Runner`
+directory and run the application in release mode:
 
 ```shell
 $ cd Zkrd.Slack.Runner && dotnet run -c Release
@@ -32,13 +37,15 @@ $ cd Zkrd.Slack.Runner && dotnet run -c Release
 
 #### Compile and deploy
 
-To run the compiled application from a different directory or on a different machine, you first need to compile the application on a machine with the .NET 6.0 SKD installed:
+To run the compiled application from a different directory or on a different machine, you first need to compile the
+application on a machine with the .NET 6.0 SKD installed:
 
 ```shell
 $ dotnet build -c Release
 ```
 
-Then deploy the content of the directory `Zkrd.Slack.Runner/bin/Release/net6.0/` to a machine with the .NET 6.0 runtime installed. There you may run the bot:
+Then deploy the content of the directory `Zkrd.Slack.Runner/bin/Release/net6.0/` to a machine with the .NET 6.0 runtime
+installed. There you may run the bot:
 
 ```shell
 $ ./Zkrd.Slack.Runner
@@ -46,11 +53,14 @@ $ ./Zkrd.Slack.Runner
 
 ### Configuration
 
-The bot is configured via the usual .NET mechanisms. For production use, configuration via environment variables or an `appsettings.json` file is recommended.
+The bot is configured via the usual .NET mechanisms. For production use, configuration via environment variables or
+an `appsettings.json` file is recommended.
 
-*Attention! The `appsettings.json` file contains secret information like a Slack bot and app token. Secure the file appropriately for your environment!*
+*Attention! The `appsettings.json` file contains secret information like a Slack bot and app token. Secure the file
+appropriately for your environment!*
 
 The `appsettings.json` file can be found in the following locations:
+
 - for docker deployments: mount the file to `/app/appsettings.json`
 - for running via source: `Zkrd.Slack.Runner/appsettings.json`
 - for running via compile and deploy: directly in the deployed directory
@@ -59,7 +69,8 @@ The `appsettings.json` file can be found in the following locations:
 
 **Required**
 
-A Slack App-Level token with the permission `connections:write`. You can create this on the "Basic Information" page of your created Slack app (https://api.slack.com/apps).
+A Slack App-Level token with the permission `connections:write`. You can create this on the "Basic Information" page of
+your created Slack app (https://api.slack.com/apps).
 
 #### SlackCore.BotToken
 
@@ -77,7 +88,8 @@ If your network requires a proxy to connect to web-pages, use this setting to co
 
 ### Configuring the Slack app
 
-To be able to connect to a Slack workspace, a Slack app must be created. The easiest way is to use the following manifest (replace any information in `<>`:
+To be able to connect to a Slack workspace, a Slack app must be created. The easiest way is to use the following
+manifest (replace any information in `<>`:
 
 <details>
 <summary>Expand to see the app manifest</summary>
@@ -123,7 +135,8 @@ settings:
 
 </details>
 
-You will also need to create a App-Level Token on the "Basic information" page. The token should have the `connections:write` permission.
+You will also need to create a App-Level Token on the "Basic information" page. The token should have
+the `connections:write` permission.
 
 Don't forget to install the application to your workspace.
 
@@ -146,7 +159,9 @@ $ dotnet user-secrets set Proxy:Port "<port>"
 
 ### Repository structure
 
-The repository is structured into directories, each containing either a module for a particular purpose or test projects for these modules ending with `.Tests`. Each module has a README file containing further information about its purpose. A short summary of each module can be found here.
+The repository is structured into directories, each containing either a module for a particular purpose or test projects
+for these modules ending with `.Tests`. Each module has a README file containing further information about its purpose.
+A short summary of each module can be found here.
 
 #### Zkrd.Slack.Runner
 
@@ -154,7 +169,8 @@ This is the main entrypoint of the application.
 
 #### Zkrd.Slack.Core
 
-The core module, which initializes the connection to the Slack servers and dispatches incoming messages to registered handlers.
+The core module, which initializes the connection to the Slack servers and dispatches incoming messages to registered
+handlers.
 
 #### Zkrd.Slack.FooBar
 
@@ -166,10 +182,38 @@ A demo module showcasing how to register and implement API endpoints of the bot.
 
 #### Zkrd.Slack.Help
 
-A module to return the bot#s help information a user.
+A module to return the bots help information a user.
+
+### Tests
+
+#### Unit tests
+
+The project contains unit tests for each module. These are implemented using NUnit. Test mocks are created using
+NSubstitute and assertion is done via FluentAssertions.
+
+#### Mutation tests
+
+Additionally to the unit tests, the project contains mutation tests. Mutation tests are a useful form of meta-testing as
+they check, whether the written tests are actually useful to find bugs in your application. To do that, the source code
+of the application under test is modified using certain rules. Afterwards the tests are executed and you get to see, how
+many of the generated mutations were caught by the tests. While you should aim for a high percentage of mutation
+coverage, it is usually not possible to achieve 100%. 70%-80% are usually the norm.
+
+In this project, the tool that is used for mutation testing
+is [Stryker](https://stryker-mutator.io/docs/stryker-net/introduction/). To run this tool, change into a test directory
+and run the tool:
+
+```shell
+$ dotnet stryker
+```
+
+The run may take a while to complete, depending on the number of tests and the size of the project to mutate. Afterwards
+a report is generated, which shows which mutations are either not tested at all or were not caught.
 
 ## Legal
 
 ### License
 
 This application is licensed under the MIT license. See `LICENSE.md` for the full license text.
+
+
