@@ -5,7 +5,9 @@ tasks:
       ./dotnet-install.sh --install-dir /workspace/dotnet
       rm dotnet-install.sh
       sudo ln -s /workspace/dotnet/dotnet /usr/bin/dotnet
-  - init: dotnet restore
+    command: | 
+      dotnet restore
+      dotnet tool restore
 
 ports:
   - port: 5000
