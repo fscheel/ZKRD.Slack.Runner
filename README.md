@@ -1,5 +1,7 @@
 # The ZKRD Slack bot
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/fscheel/ZKRD.Slack.Runner)
+
 This is the slack bot used and developed by [ZKRD gGmbH](https://www.zkrd.de). It is used as a tool for training,
 prototyping and productivity. Its ultimate goal is to enhance the daily work the employees at ZKRD.
 
