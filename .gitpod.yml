@@ -11,8 +11,6 @@ ports:
   - port: 5000
     onOpen: open-browser
 
-image: gitpod/workspace-dotnet
-
 vscode:
   extensions:
     - muhammad-sammy.csharp
