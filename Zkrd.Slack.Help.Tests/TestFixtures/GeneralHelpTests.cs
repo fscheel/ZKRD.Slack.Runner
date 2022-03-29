@@ -5,6 +5,7 @@ using Slack.NetStandard.EventsApi;
 using Slack.NetStandard.EventsApi.CallbackEvents;
 using Slack.NetStandard.Socket;
 using Slack.NetStandard.WebApi.Chat;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -99,12 +100,12 @@ public class GeneralHelpTests
 
       await serviceInstance.Chat.Received(1).Post(Arg.Is<PostMessageRequest>(p =>
          p.Blocks.First().IsSectionWithMarkdownText(
-            "_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.\n" +
-            "I have near endless contingencies, but my current capabilities are limited to the loaded modules.\n" +
-            "To learn more about any of them, use `<@154> help <module>`.\n" +
-            "\n" +
-            "*Loaded modules:*\n" +
-            "none\n")
+            $"_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.{Environment.NewLine}" +
+            $"I have near endless contingencies, but my current capabilities are limited to the loaded modules.{Environment.NewLine}" +
+            $"To learn more about any of them, use `<@154> help <module>`.{Environment.NewLine}" +
+            $"{Environment.NewLine}" +
+            $"*Loaded modules:*{Environment.NewLine}" +
+            $"none{Environment.NewLine}")
       ));
    }
 }

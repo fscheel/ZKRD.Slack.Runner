@@ -46,12 +46,12 @@ public class TopLevelHelpTests
 
       await serviceInstance.Chat.Received(1).Post(Arg.Is<PostMessageRequest>(p =>
          p.Blocks.First().IsSectionWithMarkdownText(
-            "_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.\n" +
-            "I have near endless contingencies, but my current capabilities are limited to the loaded modules.\n" +
-            "To learn more about any of them, use `<@154> help <module>`.\n" +
-            "\n" +
-            "*Loaded modules:*\n" +
-            "TestModule - This is the description of TestModule\n")
+            $"_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.{Environment.NewLine}" +
+            $"I have near endless contingencies, but my current capabilities are limited to the loaded modules.{Environment.NewLine}" +
+            $"To learn more about any of them, use `<@154> help <module>`.{Environment.NewLine}" +
+            $"{Environment.NewLine}" +
+            $"*Loaded modules:*{Environment.NewLine}" +
+            $"TestModule - This is the description of TestModule{Environment.NewLine}")
       ));
    }
 
@@ -82,15 +82,15 @@ public class TopLevelHelpTests
 
       await serviceInstance.Chat.Received(1).Post(Arg.Is<PostMessageRequest>(p =>
          p.Blocks.First().IsSectionWithMarkdownText(
-            "_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.\n" +
-            "I have near endless contingencies, but my current capabilities are limited to the loaded modules.\n" +
-            "To learn more about any of them, use `<@154> help <module>`.\n" +
-            "\n" +
-            "*Loaded modules:*\n" +
-            "TestModule - This is the description of TestModule\n" +
-            "TestModule2 - This is the description of TestModule2\n" +
-            "TestModule3 - This is the description of TestModule3\n" +
-            "TestModule4 - This is the description of TestModule4\n")
+            $"_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.{Environment.NewLine}" +
+            $"I have near endless contingencies, but my current capabilities are limited to the loaded modules.{Environment.NewLine}" +
+            $"To learn more about any of them, use `<@154> help <module>`.{Environment.NewLine}" +
+            $"{Environment.NewLine}" +
+            $"*Loaded modules:*{Environment.NewLine}" +
+            $"TestModule - This is the description of TestModule{Environment.NewLine}" +
+            $"TestModule2 - This is the description of TestModule2{Environment.NewLine}" +
+            $"TestModule3 - This is the description of TestModule3{Environment.NewLine}" +
+            $"TestModule4 - This is the description of TestModule4{Environment.NewLine}")
       ));
    }
 
@@ -120,10 +120,10 @@ public class TopLevelHelpTests
       await sut.HandleMessageAsync(input, CancellationToken.None);
 
       await serviceInstance.Chat.Received(1).Post(Arg.Is<PostMessageRequest>(p =>
-         p.Blocks.First().GetSectionMarkdownText().EndsWith("ATestModule - This is the description of ATestModule\n" +
-                                                            "BTestModule - This is the description of BTestModule\n" +
-                                                            "CTestModule - This is the description of CTestModule\n" +
-                                                            "FTestModule - This is the description of FTestModule\n")
+         p.Blocks.First().GetSectionMarkdownText().EndsWith($"ATestModule - This is the description of ATestModule{Environment.NewLine}" +
+                                                            $"BTestModule - This is the description of BTestModule{Environment.NewLine}" +
+                                                            $"CTestModule - This is the description of CTestModule{Environment.NewLine}" +
+                                                            $"FTestModule - This is the description of FTestModule{Environment.NewLine}")
       ));
    }
 

@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Slack.NetStandard;
 using Slack.NetStandard.EventsApi;
 using Slack.NetStandard.EventsApi.CallbackEvents;
@@ -20,12 +19,12 @@ public class Help : IAsyncSlackMessageHandler
    private readonly IEnumerable<IModuleHelp> _moduleHelpInfos;
    private readonly ISlackApiClient _apiClient;
 
-   private const string IntroductoryText =
-      "_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.\n" +
-      "I have near endless contingencies, but my current capabilities are limited to the loaded modules.\n" +
-      "To learn more about any of them, use `{0} help <module>`.\n" +
-      "\n" +
-      "*Loaded modules:*\n" +
+   private readonly string _introductoryText =
+      $"_beep-bopp_ Welcome to the help system. Let me introduce myself. I am your friendly neighbourhood bot.{Environment.NewLine}" +
+      $"I have near endless contingencies, but my current capabilities are limited to the loaded modules.{Environment.NewLine}" +
+      $"To learn more about any of them, use `{{0}} help <module>`.{Environment.NewLine}" +
+      $"{Environment.NewLine}" +
+      $"*Loaded modules:*{Environment.NewLine}" +
       "{1}";
 
    public Help(IEnumerable<IModuleHelp> moduleHelpInfos, ISlackApiClient apiClient)
@@ -62,7 +61,7 @@ public class Help : IAsyncSlackMessageHandler
       {
          new Section(
             new MarkdownText(
-               string.Format(IntroductoryText, match.Groups["mention"].Value, BuildModuleList())
+               string.Format(_introductoryText, match.Groups["mention"].Value, BuildModuleList())
             )
          ),
       };
@@ -71,7 +70,7 @@ public class Help : IAsyncSlackMessageHandler
    {
       if (!_moduleHelpInfos.Any())
       {
-         return "none\n";
+         return "none" + Environment.NewLine;
       }
 
       var sb = new StringBuilder();
