@@ -1,4 +1,10 @@
 tasks:
+  - init: |
+      wget "https://dot.net/v1/dotnet-install.sh"
+      chmod +x dotnet-install.sh
+      ./dotnet-install.sh --install-dir /workspace/dotnet
+      rm dotnet-install.sh
+      sudo ln -s /workspace/dotnet/dotnet /usr/bin/dotnet
   - init: dotnet restore
 
 ports:
