@@ -153,7 +153,7 @@ $ cd Zkrd.Slack.Runner
 $ dotnet user-secrets init
 $ dotnet user-secrets set SlackCore:BotToken "<your token>"
 $ dotnet user-secrets set SlackCore:AppToken "<your token>"
-$ dotner user-secrets set Proxy:Host "<host string>"
+$ dotnet user-secrets set Proxy:Host "<host string>"
 $ dotnet user-secrets set Proxy:Port "<port>"
 ```
 
