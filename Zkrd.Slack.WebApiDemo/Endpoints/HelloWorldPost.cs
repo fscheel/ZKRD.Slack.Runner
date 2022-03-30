@@ -1,10 +1,13 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Zkrd.Slack.WebApiDemo.ApiContracts;
 using Zkrd.Slack.WebApiDemo.Services;
 
 namespace Zkrd.Slack.WebApiDemo.Endpoints
 {
+   [HttpPost("/helloworld/api/")]
+   [AllowAnonymous]
    public class HelloWorldPost: Endpoint<HelloWorldRequest>
    {
       private readonly ISlackService _slackService;
@@ -14,13 +17,6 @@ namespace Zkrd.Slack.WebApiDemo.Endpoints
       {
          _logger = logger;
          _slackService = slackService;
-      }
-
-      public override void Configure()
-      {
-         Verbs(Http.POST);
-         Routes("/helloworld/api/");
-         AllowAnonymous();
       }
 
       public override async Task HandleAsync(HelloWorldRequest req, CancellationToken ct)
