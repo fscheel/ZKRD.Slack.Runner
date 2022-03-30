@@ -5,6 +5,10 @@
 This is the slack bot used and developed by [ZKRD gGmbH](https://www.zkrd.de). It is used as a tool for training,
 prototyping and productivity. Its ultimate goal is to enhance the daily work the employees at ZKRD.
 
+A Slack bot (sometimes also called `app`) is a program that automatically reacts to text sent in Slack or posts text
+triggered by an external source. Bots can for example conduct games or post information about recent git comments in a
+dedicated channel.
+
 ## Usage
 
 The bot is currently not distributed in a packaged format, but you have multiple ways to compile and run the bot in
@@ -153,7 +157,7 @@ $ cd Zkrd.Slack.Runner
 $ dotnet user-secrets init
 $ dotnet user-secrets set SlackCore:BotToken "<your token>"
 $ dotnet user-secrets set SlackCore:AppToken "<your token>"
-$ dotnet user-secrets set Proxy:Host "<host string>"
+$ dotner user-secrets set Proxy:Host "<host string>"
 $ dotnet user-secrets set Proxy:Port "<port>"
 ```
 
