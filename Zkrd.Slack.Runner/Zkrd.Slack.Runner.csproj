@@ -7,15 +7,16 @@
   </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FastEndpoints" Version="4.0.0" />
-      <PackageReference Include="FastEndpoints.Swagger" Version="4.0.0" />
-      <PackageReference Include="Slack.NetStandard" Version="3.10.0" />
+      <PackageReference Include="FastEndpoints" Version="5.1.0" />
+      <PackageReference Include="FastEndpoints.Swagger" Version="5.1.0" />
+      <PackageReference Include="Slack.NetStandard" Version="5.1.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Zkrd.Slack.Core\Zkrd.Slack.Core.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.FooBar\Zkrd.Slack.FooBar.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.Help\Zkrd.Slack.Help.csproj" />
+      <ProjectReference Include="..\Zkrd.Slack.Weather\Zkrd.Slack.Weather.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.WebApiDemo\Zkrd.Slack.WebApiDemo.csproj" />
     </ItemGroup>
 
