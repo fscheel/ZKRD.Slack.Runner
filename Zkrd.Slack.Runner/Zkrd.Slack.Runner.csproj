@@ -16,6 +16,7 @@
       <ProjectReference Include="..\Zkrd.Slack.Core\Zkrd.Slack.Core.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.FooBar\Zkrd.Slack.FooBar.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.Help\Zkrd.Slack.Help.csproj" />
+      <ProjectReference Include="..\Zkrd.Slack.Weather\Zkrd.Slack.Weather.csproj" />
       <ProjectReference Include="..\Zkrd.Slack.WebApiDemo\Zkrd.Slack.WebApiDemo.csproj" />
     </ItemGroup>
 
